@@ -1,0 +1,40 @@
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const copyButton = document
+      .querySelector('#copyFoldersBtn')
+      .addEventListener('click', () => {
+        copyFolders();
+      });
+  });
+
+  /**
+   *
+   */
+  function copyFolders() {
+    document.querySelector('#message').classList.remove('red-text');
+    document.querySelector('#message').innerText = 'Duplicating folder...';
+
+    const sourceId = document.querySelector('#sourceId').value;
+    const destinationId = document.querySelector('#destinationId').value;
+    const isCopyFiles = document.querySelector('#copyFilesCheck').checked;
+
+    google.script.run
+      .withSuccessHandler(onCopySuccess)
+      .withFailureHandler(onCopyFailure)
+      .copyFolders({ sourceId, destinationId, isCopyFiles });
+  }
+
+  function onCopySuccess() {
+    document.querySelector('#message').classList.remove('red-text');
+    document.querySelector('#message').innerText =
+      'Folder duplicated successfully!';
+  }
+
+  function onCopyFailure(e) {
+    document.querySelector('#message').classList.add('red-text');
+    document.querySelector('#message').innerText = e.message.slice(
+      7,
+      e.message.length
+    );
+  }
+</script>
